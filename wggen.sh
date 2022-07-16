@@ -49,7 +49,6 @@ done
 keys=($(cat ${OutputDir}/keys/server.txt))
 ServerPrivatekey=${keys[0]}
 ServerPublickey=${keys[1]}
-PSKkey=${keys[2]}
 
 ### サーバー設定ファイルの[Interface]部分を出力
 # クライアント→LAN内はNATでアクセス、クライアントへは他クライアント含め自由にアクセス可という設定。
@@ -68,6 +67,8 @@ for i in $(seq $Peers) ; do
 	keys=($(cat ${OutputDir}/keys/$base.txt)) || exit 1
 	ClientPrivatekey=${keys[0]}
 	ClientPublickey=${keys[1]}
+	PSKkey=${keys[2]}
+	
 	if "$UsePSK"; then
 		psk="PresharedKey = $PSKkey"
 	else
@@ -90,7 +91,7 @@ for i in $(seq $Peers) ; do
 	### ここまで
 
 	### サーバー設定ファイルの各[Peer]部分を出力
-	cat <<-EOF3 |sed -e '/^#TBDel/d' >> ${OutputDir}/${ServerConfigFile}|| exit 1
+	cat <<-EOF3 >> ${OutputDir}/${ServerConfigFile}|| exit 1
 
 	[Peer] #$i
 	PublicKey = $ClientPublickey
