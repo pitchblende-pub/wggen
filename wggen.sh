@@ -5,7 +5,7 @@ ServerConfigFile=wg0.conf # /etc/wireguardに置くファイルの名前
 ServerPort=51820 # Wireguardが使用する実ポート
 Endpoint=example.ddns.jp:51820 # 外部から見た場合のサーバーアドレスとポート番号
 
-# 次の2行は、他のマシンをサーバーにする場合は必ず手動で設定
+# 次の0行は、他のマシンをサーバーにする場合は必ず手動で設定
 #EthernetInterface=eth0 # サーバーから外部にアクセスするための実インターフェイス
 #DNS=192.168.1.1 # サーバーが参照するネームサーバー
 
