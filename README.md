@@ -29,23 +29,23 @@ Wireguardではトンネリング両端のホストの扱いに差はありま�
 サーバーにぶら下がるクライアント数。9999まで対応。
 ### ServerConfigFile
 サーバーの設定ファイル。/etc/wireguardにコピーして使用。
-### ServerPort
+#### ServerPort
 サーバーのWireguardが使用する実ポート。
-### Endpoint
+#### Endpoint
 外部からアクセスする時に使用するサーバー名・ポート番号。
-### EthernetInterface
+#### EthernetInterface
 サーバーがトンネルされて届いたアクセスを他のコンピューターにつなぐ場合に使用するインターフェイス名。
 自動で設定されますが、Wireguardを動かすサーバー以外のコンピューターでスクリプトを実行している場合や複数のインターフェイスがある場合は、
 **環境に応じてコメントを外して記入**。
-### DNS
+#### DNS
 トンネル接続後にクライアント側が使用するネームサーバー。上記EthernetInterfaceを見て自動的に設定されますが、**環境により手動で設定**。
-### ServerWgAddress, ClientWgAddress
+#### ServerWgAddress, ClientWgAddress
 それぞれ、サーバー側・クライアント側の仮想インターフェイスのIPアドレス。$iをクライアント番号として記述可能。
-### ServerAllowedIPs, ClientAllowedIPs
+#### ServerAllowedIPs, ClientAllowedIPs
 それぞれ、サーバー側・クライアント側において、どの宛先向けのアクセスをトンネリングに流すかを指定する変数。デフォルトの設定では、サーバー側は相手のクライアント向けアクセスのみをトンネル。クライアント側は、サーバー、サーバーにつながる全クライアント、サーバーがつながっているLANである192.168.1.0/64向けをトンネル。***（最後のLANアドレスは環境に従って要修正。）***
-### GenPSK
+#### GenPSK
 trueの場合は事前共有鍵を生成。
-### OutputDir
+#### OutputDir
 生成したファイルの出力先を、絶対パスまたは本スクリプトからの相対パスで指定。
 
 ## 補足
