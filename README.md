@@ -25,9 +25,9 @@ Wireguardではトンネリング両端のホストの扱いに差はありま�
 を実行し自動起動を設定します。
 
 ## 設定が必要な変数一覧
-### Peers
+#### Peers
 サーバーにぶら下がるクライアント数。9999まで対応。
-### ServerConfigFile
+#### ServerConfigFile
 サーバーの設定ファイル。/etc/wireguardにコピーして使用。
 ### ServerPort
 サーバーのWireguardが使用する実ポート。
