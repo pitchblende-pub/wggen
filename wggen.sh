@@ -4,7 +4,7 @@ ServerConfigFile=wg0.conf # /etc/wireguardに置くファイルの名前
 ServerPort=51820 # Wireguardが使用する実ポート
 Endpoint=example.ddns.jp:51820 # 外部から見た場合のサーバーアドレスとポート番号
 EthernetInterface=eth0 # サーバーから外部にアクセスするための実インターフェイス
-DNS=192.168.1.1 # サーバーが参照するネームサーバー
+DNS=192.168.1.1 # トンネル開通後に参照するネームサーバー
 
 #トンネルとして使う仮想インターフェイスのアドレス($iはクライアント番号で置き換えられる。)
 #多くの場合修正不要
