@@ -102,13 +102,11 @@ for i in $(seq $Peers) ; do
 	EOF3
 	### ここまで
 
-
 	# qrencodeコマンドがある場合はQRコードを生成
 	if [ -n "$(command -v qrencode)" ]; then
 		qrencode -t ANSIUTF8i -r c${base}.conf -o qr${base}.txt || exit 1
 		qrencode -t PNG -r c${base}.conf -o qr${base}.png || exit 1
 	fi
-
 done
 
 
