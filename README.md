@@ -19,6 +19,7 @@ Wireguardではトンネリング両端のホストの扱いに差はありま�
 
 を実行することにより、Wireguardが起動します。サーバー以外のホストにアクセスするためには/etc/sysctl.confを
 >net.ipv4.ip_forward=1
+>
 >net.ipv6.conf.all.forward=1
 
 と修正した上でsudo sysctl -pを実行します。
