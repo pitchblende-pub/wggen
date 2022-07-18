@@ -20,7 +20,11 @@ UsePSK=true #事前共有鍵を使用するか否か(true/false)
 OutputDir='output' # 設定ファイルの出力先。絶対パスまたは本スクリプトからの相対パス。
 ###################################################################################################
 cd `dirname $0` || exit 1
-IFS=$'\n'
+if [ ! -d ${OutputDir}/keys ]; then
+	mkdir -p ${OutputDir}/keys || exit 1
+fi
+cd $OutputDir || exit 1
+
 if [ -z $EthernetInterface ]; then
 	#定義されていない場合はシステムから取得
 	EthernetInterface=$(for d in `find /sys/devices -name net | grep -m1 -v virtual`; do ls $d/; done)
@@ -29,11 +33,6 @@ if [ -z $EthernetInterface ]; then
 		exit 1
 	fi
 fi
-
-if [ ! -d ${OutputDir}/keys ]; then
-	mkdir -p ${OutputDir}/keys || exit 1
-fi
-cd $OutputDir || exit 1
 
 if [ ! -f keys/server.txt ]; then
 	pubkey=$(wg genkey |tee keys/server.txt|wg pubkey) || exit 1
@@ -48,6 +47,7 @@ for i in $(seq  $Peers) ; do
         fi
 done
 
+IFS=$'\n'
 keys=($(cat keys/server.txt))
 ServerPrivatekey=${keys[0]}
 ServerPublickey=${keys[1]}
