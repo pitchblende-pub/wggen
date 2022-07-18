@@ -36,7 +36,7 @@ fi
 cd $OutputDir || exit 1
 
 if [ ! -f keys/server.txt ]; then
-	pubkey=$(wg genkey |tee keys/server.txt|wg pubkey)
+	pubkey=$(wg genkey |tee keys/server.txt|wg pubkey) || exit 1
 	echo $pubkey >> keys/server.txt || exit 1
 fi
 
