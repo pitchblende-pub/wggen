@@ -19,7 +19,13 @@
 　適当なディレクトリに本スクリプトを置き、***後記の「設定が必要な変数一覧」を編集し***実行してください。outputディレクトリ下にwg0.confが生成されるので、これを/etc/wireguard/にコピーし
 > wq-quick up wg0
 
-を実行することにより、Wireguardが起動します。一方クライアント側には、c0001.conf等のファイルをインストールしてください。linuxならばwg0.confに名前を変えて/etc/wireguardにコピー、スマホではqr0001.txtやqr0001.pngを、Wireguardアプリ内のカメラで読み込ませてください。
+を実行することにより、Wireguardが起動します。サーバー以外のホストにアクセスするためには/etc/sysctl.confを
+>net.ipv4.ip_forward=1<br>
+>net.ipv6.conf.all.forward=1
+
+と修正した上でsudo sysctl -pを実行します。
+
+　一方クライアント側には、c0001.conf等のファイルをインストールしてください。linuxならばwg0.confに名前を変えて/etc/wireguardにコピー、スマホではqr0001.txtやqr0001.pngを、Wireguardアプリ内のカメラで読み込ませてください。
 
 　その他の設定に問題がなければ、トンネリングを利用した通信が可能になります。通信を確認したらサーバー側で
 > sudo systemctl start wg-quick@wg0
