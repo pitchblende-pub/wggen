@@ -19,6 +19,7 @@ ClientAllowedIPs='10.0.0.0/16, fdfd:0123:1::/96, 192.168.1.0/24' # LAN内向け�
 UsePSK=true #事前共有鍵を使用するか否か(true/false)
 OutputDir='output' # 設定ファイルの出力先。絶対パスまたは本スクリプトからの相対パス。
 ###################################################################################################
+umask=077
 cd `dirname $0` || exit 1
 if [ ! -d ${OutputDir}/keys ]; then
 	mkdir -p ${OutputDir}/keys || exit 1
@@ -35,15 +36,13 @@ if [ -z $EthernetInterface ]; then
 fi
 
 if [ ! -f keys/server.txt ]; then
-	pubkey=$(wg genkey |tee keys/server.txt|wg pubkey) || exit 1
-	echo $pubkey >> keys/server.txt || exit 1
+        echo $(wg genkey |tee keys/server.txt|wg pubkey) >> keys/server.txt || exit 1
 fi
 
-for i in $(seq  $Peers) ; do
-	base=$(printf %04d $i)
-	if [ ! -f keys/$base.txt ]; then
-		pubkey=$(wg genkey |tee keys/$base.txt|wg pubkey)
-		echo ${pubkey}$'\n'$(wg genpsk) >> keys/$base.txt||exit 1
+for i in $(seq $Peers) ; do
+        base=$(printf %04d $i)
+        if [ ! -f keys/$base.txt ]; then
+		echo $(wg genkey |tee keys/$base.txt|wg pubkey;wg genpsk) |tr ' ' '\n' >> keys/$base.txt || exit 1
         fi
 done
 
@@ -108,6 +107,4 @@ for i in $(seq $Peers) ; do
 		qrencode -t PNG -r c${base}.conf -o qr${base}.png || exit 1
 	fi
 done
-
-
 
