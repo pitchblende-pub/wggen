@@ -6,14 +6,16 @@ Endpoint=example.ddns.jp:51820 # 外部から見た場合のサーバーアド�
 EthernetInterface=eth0 # サーバーから外部にアクセスするための実インターフェイス
 DNS=192.168.1.1 # トンネル開通後に参照するネームサーバー
 
-#トンネルとして使う仮想インターフェイスのアドレス($iはクライアント番号で置き換えられる。)
+#トンネルとして使う仮想インターフェイスのアドレス
 #多くの場合修正不要
-ServerWgAddress='10.0.100.1/16, fdfd:0123:1::a000/96'
-ClientWgAddress='10.0.$((i/100)).$((i%100))/16, fdfd:0123:1::$i/96'
+#$iはクライアント番号、$IPv6Prefixは生成した48bitプレフィックスに置き換えられる。
+ServerWgAddress='10.0.100.1/16, $IPv6Prefix::a000/96'
+ClientWgAddress='10.0.$((i/100)).$((i%100))/16, $IPv6Prefix::$i/96'
 
-# 仮想インターフェイスにどの宛先のパケットを送るかの選択($iはクライアント番号で置き換えられる。)
-ServerAllowedIPs='10.0.$((i/100)).$((i%100))/32, fdfd:0123:1::$i/128'
-ClientAllowedIPs='10.0.0.0/16, fdfd:0123:1::/96, 192.168.1.0/24' # LAN内向けアクセスのみをトンネルさせる場合（192.168.1.0/24は使用環境のネットワークアドレスに合わせること）
+# 仮想インターフェイスにどの宛先のパケットを送るかの選択
+#$iはクライアント番号、$IPv6Prefixは生成した48bitプレフィックスに置き換えられる。
+ServerAllowedIPs='10.0.$((i/100)).$((i%100))/32, $IPv6Prefix::$i/128'
+ClientAllowedIPs='10.0.0.0/16, $IPv6Prefix::/96, 192.168.1.0/24' # LAN内向けアクセスのみをトンネルさせる場合（192.168.1.0/24は使用環境のネットワークアドレスに合わせること）
 #ClientAllowedIPs='0.0.0.0/0,::' # 全アクセスをトンネルさせる場合
 
 UsePSK=true #事前共有鍵を使用するか否か(true/false)
@@ -36,7 +38,9 @@ if [ -z $EthernetInterface ]; then
 fi
 
 if [ ! -f keys/server.txt ]; then
-        echo $(wg genkey |tee keys/server.txt|wg pubkey) >> keys/server.txt || exit 1
+	#RFC4139に従いIPv6プレフィックスを生成
+        IPv6Prefix=$(echo $(date +%s%N)$(cat /etc/machine-id)|sha1sum|cut -c 31-|sed -e 's/^\(..\)\(....\)\(....\).*$/fd\1:\2:\3/g')
+        echo $(wg genkey |tee keys/server.txt|wg pubkey)$'\n'${IPv6Prefix} >> keys/server.txt || exit 1
 fi
 
 for i in $(seq $Peers) ; do
@@ -50,12 +54,13 @@ IFS=$'\n'
 keys=($(cat keys/server.txt))
 ServerPrivatekey=${keys[0]}
 ServerPublickey=${keys[1]}
+IPv6Prefix=${keys[2]}
 
 ### サーバー設定ファイルの[Interface]部分を出力
 # クライアント→LAN内はNATでアクセス、クライアントへは他クライアント含め自由にアクセス可という設定。
 cat > ${ServerConfigFile} <<EOF1|| exit 1
 [Interface]
-Address = $ServerWgAddress
+Address = $(eval echo $ServerWgAddress)
 PostUp   = iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o $EthernetInterface -j MASQUERADE; ip6tables -A FORWARD -o %i -j ACCEPT; ip6tables -t nat -A POSTROUTING -o $EthernetInterface -j MASQUERADE
 PostDown = iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o $EthernetInterface -j MASQUERADE; ip6tables -D FORWARD -o %i -j ACCEPT; ip6tables -t nat -D POSTROUTING -o $EthernetInterface -j MASQUERADE
 ListenPort = $ServerPort
@@ -86,7 +91,7 @@ for i in $(seq $Peers) ; do
 	[Peer]
 	PublicKey = $ServerPublickey
 	Endpoint = $Endpoint
-	AllowedIPs = $ClientAllowedIPs
+	AllowedIPs = $(eval echo $ClientAllowedIPs)
 	$pskoutput
 	EOF2
 	### ここまで
