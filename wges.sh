@@ -1,7 +1,9 @@
 #!/bin/bash
+# wgse WireGuard Easy Setup
+
 Peers=10 # 設定するクライアントの数。1〜9999の範囲。
 ServerConfigFile=wg0.conf # /etc/wireguardに置くファイルの名前
-ServerPort=51820 # Wireguardが使用する実ポート
+ServerPort=51820 # WireGuardが使用する実ポート
 Endpoint=example.ddns.jp:51820 # 外部から見た場合のサーバーアドレスとポート番号
 EthernetInterface=eth0 # サーバーから外部にアクセスするための実インターフェイス
 DNS=192.168.1.1 # トンネル開通後に参照するネームサーバー
@@ -18,7 +20,7 @@ ClientAllowedIPs='10.0.0.0/16, $IPv6Prefix::/96, 192.168.1.0/24' # LAN内向け�
 #ClientAllowedIPs='0.0.0.0/0, ::' # 全アクセスをトンネルさせる場合
 
 UsePSK=true # 事前共有鍵を使用するか否か(true/false)
-OutputDir='output' # 設定ファイルの出力先。絶対パスまたは本スクリプトからの相対パス。
+OutputDir='wges-output' # 設定ファイルの出力先。絶対パスまたは本スクリプトからの相対パス。
 ###################################################################################################
 umask=077
 cd `dirname $0` || exit 1
