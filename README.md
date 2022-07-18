@@ -26,7 +26,7 @@
 
 と修正した上でsudo sysctl -pを実行します。
 
-　一方クライアント側には、c0001.conf等のファイルをインストールしてください。linuxならばwg0.confに名前を変えて/etc/wireguardにコピー、スマホではqr0001.txtやqr0001.pngを、Wireguardアプリ内のカメラで読み込ませてください。
+　一方クライアント側には、c0001.conf等のファイルをインストールしてください。linuxならばwg0.conf等に名前を変えて/etc/wireguardにコピー、スマホではqr0001.txtやqr0001.pngを、Wireguardアプリ内のカメラで読み込ませてください。
 
 　その他の設定に問題がなければ、トンネリングを利用した通信が可能になります。通信を確認したらサーバー側で
 > sudo systemctl start wg-quick@wg0
