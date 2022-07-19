@@ -8,7 +8,13 @@ Endpoint=example.ddns.jp:51820 # 外部から見た場合のサーバーアド�
 EthernetInterface=eth0 # サーバーから外部にアクセスするための実インターフェイス
 DNS=192.168.1.1 # トンネル開通後に参照するネームサーバー
 
-# トンネルとして使う仮想インターフェイスのアドレス（多くの場合修正不要）
+# サーバー側のローカルLANネットワークアドレス。クライアントからアクセスさせたいネットワークを記述。
+# IPv6等含めて複数記述する場合は''内に「,」で区切って併記。
+LocalNetwork='192.168.1.0/24'
+
+#### 多くの場合、ここより下の行は変更不要 ####
+
+# トンネルとして使う仮想インターフェイスのアドレス
 # $iはクライアント番号、$IPv6Prefixは生成した48bitプレフィックスに置き換えられる。
 ServerWgAddress='10.0.100.1/16, $IPv6Prefix::a000/96'
 ClientWgAddress='10.0.$((i/100)).$((i%100))/16, $IPv6Prefix::$i/96'
@@ -16,8 +22,7 @@ ClientWgAddress='10.0.$((i/100)).$((i%100))/16, $IPv6Prefix::$i/96'
 # 仮想インターフェイスにどの宛先のパケットを送るかの選択
 # $iはクライアント番号、$IPv6Prefixは生成した48bitプレフィックスに置き換えられる。
 ServerAllowedIPs='10.0.$((i/100)).$((i%100))/32, $IPv6Prefix::$i/128'
-ClientAllowedIPs='10.0.0.0/16, $IPv6Prefix::/96, 192.168.1.0/24' # LAN内向けアクセスのみをトンネルさせる場合
-#（↑192.168.1.0/24は必ず使用環境のネットワークアドレスに合わせること）
+ClientAllowedIPs='10.0.0.0/16, $IPv6Prefix::/96, $LocalNetwork' # LAN内向けアクセスのみをトンネルさせる場合
 #ClientAllowedIPs='0.0.0.0/0, ::' # 全アクセスをトンネルさせてサーバー経由にする場合
 
 UsePSK=true # 事前共有鍵を使用するか否か(true/false)
@@ -70,6 +75,7 @@ PrivateKey = $ServerPrivatekey
 EOF1
 ### ここまで
 
+ClientAllowedIPs=$(echo $ClientAllowedIPs|sed -e 's/,[ \t]*$//') # $LocalNetworkが空の場合の対策
 for i in $(seq $Peers) ; do
 	base=$(printf %04d $i)
 	keys=($(cat keys/$base.txt)) || exit 1
