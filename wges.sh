@@ -18,7 +18,7 @@ ClientWgAddress='10.0.$((i/100)).$((i%100))/16, $IPv6Prefix::$i/96'
 ServerAllowedIPs='10.0.$((i/100)).$((i%100))/32, $IPv6Prefix::$i/128'
 ClientAllowedIPs='10.0.0.0/16, $IPv6Prefix::/96, 192.168.1.0/24' # LAN内向けアクセスのみをトンネルさせる場合
 #（↑192.168.1.0/24は必ず使用環境のネットワークアドレスに合わせること）
-#ClientAllowedIPs='0.0.0.0/0, ::' # 全アクセスをトンネルさせる場合
+#ClientAllowedIPs='0.0.0.0/0, ::' # 全アクセスをトンネルさせてサーバー経由にする場合
 
 UsePSK=true # 事前共有鍵を使用するか否か(true/false)
 OutputDir='wges-output' # 設定ファイルの出力先。絶対パスまたは本スクリプトからの相対パス。
