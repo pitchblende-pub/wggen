@@ -37,8 +37,6 @@
 ## 設定が必要な変数一覧
 #### Peers
 サーバーにぶら下がるクライアント数。9999まで対応。
-#### ServerConfigFile
-サーバーの設定ファイル。/etc/wireguardにコピーして使用。
 #### ServerPort
 サーバーのWireGuardが使用する実ポート。
 #### Endpoint
@@ -53,7 +51,8 @@
 ***
 
 **（多くの場合、ここより下の変数は変更不要）**
-
+#### ServerConfigFile
+サーバーの設定ファイル名。/etc/wireguardにコピーして使用。拡張子を除いたものがサーバー側の仮想インターフェイス名になる。
 #### ServerWgAddress, ClientWgAddress
 それぞれ、サーバー側・クライアント側の仮想インターフェイスのIPアドレス。$iをクライアント番号、$IPv6PrefixをIPv6プレフィックスとして記述可能。
 #### ServerAllowedIPs, ClientAllowedIPs
