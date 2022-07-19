@@ -1,5 +1,5 @@
 #!/bin/bash
-# wgse WireGuard Easy Setup
+# wges.sh WireGuard Easy Setup
 
 Peers=10 # 設定するクライアントの数。1〜9999の範囲。
 ServerConfigFile=wg0.conf # /etc/wireguardに置くファイルの名前
