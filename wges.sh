@@ -6,24 +6,23 @@ ServerConfigFile=wg0.conf # /etc/wireguardに置くファイルの名前
 ServerPort=51820 # WireGuardが使用する実ポート
 Endpoint=example.ddns.jp:51820 # 外部から見た場合のサーバーアドレスとポート番号
 EthernetInterface=eth0 # サーバーから外部にアクセスするための実インターフェイス
-DNS=192.168.1.1 # トンネル開通後に参照するネームサーバー
+DNS=1.1.1.1 # トンネル開通後に参照するネームサーバー
 
-# サーバー側のローカルLANネットワークアドレス。クライアントからアクセスさせたいネットワークを記述。
-# IPv6等含めて複数記述する場合は''内に「,」で区切って併記。
-LocalNetwork='192.168.1.0/24'
+# クライアントがどこ向けのアクセスをトンネルに流す（または受け入れる）かの設定
+# $iはクライアント番号、$IPv6Prefixは生成した48bitプレフィックスに置き換えられる。
+# サーバー側LANのアドレスは要変更
+ClientAllowedIPs='192.168.XX.XX/24' # サーバー側LAN向けアクセスのみをトンネル
+#ClientAllowedIPs='192.168.XX.XX/24, 10.0.0.0/16, $IPv6Prefix::/96' # 上に加えて、Wireguardでつながる全コンピューターを対象
+#ClientAllowedIPs='0.0.0.0/0, ::/0' # 全アクセスをトンネルさせてサーバー経由にする場合
 
 #### 多くの場合、ここより下の行は変更不要 ####
 
 # トンネルとして使う仮想インターフェイスのアドレス
-# $iはクライアント番号、$IPv6Prefixは生成した48bitプレフィックスに置き換えられる。
 ServerWgAddress='10.0.100.1/16, $IPv6Prefix::a000/96'
 ClientWgAddress='10.0.$((i/100)).$((i%100))/16, $IPv6Prefix::$i/96'
 
-# 仮想インターフェイスにどの宛先のパケットを送るかの選択
-# $iはクライアント番号、$IPv6Prefixは生成した48bitプレフィックスに置き換えられる。
+# サーバーがどこ向けのアクセスをトンネルに流す（または受け入れる）かの設定
 ServerAllowedIPs='10.0.$((i/100)).$((i%100))/32, $IPv6Prefix::$i/128'
-ClientAllowedIPs='10.0.0.0/16, $IPv6Prefix::/96, $LocalNetwork' # LAN内向けアクセスのみをトンネルさせる場合
-#ClientAllowedIPs='0.0.0.0/0, ::' # 全アクセスをトンネルさせてサーバー経由にする場合
 
 UsePSK=true # 事前共有鍵を使用するか否か(true/false)
 OutputDir='wges-output' # 設定ファイルの出力先。絶対パスまたは本スクリプトからの相対パス。
@@ -120,4 +119,3 @@ for i in $(seq $Peers) ; do
 		qrencode -t PNG -r c${base}.conf -o qr${base}.png || exit 1
 	fi
 done
-
