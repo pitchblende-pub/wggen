@@ -2,7 +2,6 @@
 # wges.sh WireGuard Easy Setup
 
 Peers=10 # 設定するクライアントの数。1〜9999の範囲。
-ServerConfigFile=wg0.conf # /etc/wireguardに置くファイルの名前
 ServerPort=51820 # WireGuardが使用する実ポート
 Endpoint=example.ddns.jp:51820 # 外部から見た場合のサーバーアドレスとポート番号
 EthernetInterface=eth0 # サーバーから外部にアクセスするための実インターフェイス
@@ -16,6 +15,8 @@ ClientAllowedIPs='192.168.XX.XX/24' # サーバー側LAN向けアクセスのみ
 #ClientAllowedIPs='0.0.0.0/0, ::/0' # 全アクセスをトンネルさせてサーバー経由にする場合
 
 #### 多くの場合、ここより下の行は変更不要 ####
+
+ServerConfigFile=wg0.conf # /etc/wireguardに置くファイルの名前
 
 # トンネルとして使う仮想インターフェイスのアドレス
 ServerWgAddress='10.0.100.1/16, $IPv6Prefix::a000/96'
@@ -72,6 +73,7 @@ PostDown = iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -
 ListenPort = $ServerPort
 PrivateKey = $ServerPrivatekey
 EOF1
+
 ### ここまで
 for i in $(seq $Peers) ; do
 	base=$(printf %04d $i)
