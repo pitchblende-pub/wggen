@@ -73,8 +73,6 @@ ListenPort = $ServerPort
 PrivateKey = $ServerPrivatekey
 EOF1
 ### ここまで
-
-ClientAllowedIPs=$(echo $ClientAllowedIPs|sed -e 's/,[ \t]*$//') # $LocalNetworkが空の場合の対策
 for i in $(seq $Peers) ; do
 	base=$(printf %04d $i)
 	keys=($(cat keys/$base.txt)) || exit 1
