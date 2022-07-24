@@ -75,7 +75,7 @@ PrivateKey = $ServerPrivatekey
 EOF1
 ### ここまで
 
-#ヒアドキュメント使用のため、行頭のタブをスペースに変換しないこと
+#ヒアドキュメントを使用しているため、行頭のタブをスペースに変換しないこと
 for i in $(seq $Peers) ; do
 	base=$(printf %04d $i)
 	keys=($(cat keys/$base.txt)) || exit 1
