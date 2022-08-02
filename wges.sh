@@ -2,16 +2,16 @@
 # wges.sh WireGuard Easy Setup
 
 Peers=10 # 設定するクライアントの数。1〜9999の範囲。
-ServerPort=51820 # WireGuardが使用する実ポート
+ServerPort=51820 # サーバー側WireGuardが使用する実ポート
 Endpoint=example.ddns.jp:51820 # 外部から見た場合のサーバーアドレスとポート番号
-EthernetInterface=eth0 # サーバーから外部にアクセスするための実インターフェイス
+EthernetInterface='' # サーバーから外部にアクセスするための実インターフェイス名（空欄の場合は自動取得を試行）
 DNS='1.1.1.1, 2606:4700:4700::1111' # トンネル開通後に参照するネームサーバー（デフォルトはCloudflare）
 
 # クライアントがどこ向けのアクセスをトンネルに流す（かつ受け入れる）かの設定
 # $iはクライアント番号、$IPv6Prefixは生成した48bitプレフィックスに置き換えられる。
 # 192.〜の部分は環境に合わせて修正
-ClientAllowedIPs='192.168.XX.XX/24' # サーバー側LAN向けアクセスのみをトンネル
-#ClientAllowedIPs='192.168.XX.XX/24, 10.0.0.0/16, $IPv6Prefix::/96' # 上に加えて、Wireguardでつながる全コンピューターを対象
+ClientAllowedIPs='192.168.X.X/24' # サーバー側LAN向けアクセスのみをトンネルする場合
+#ClientAllowedIPs='192.168.X.X/24, 10.0.0.0/16, $IPv6Prefix::/96' # 上に加えて、Wireguardでつながる全コンピューターを対象
 #ClientAllowedIPs='0.0.0.0/0, ::/0' # 全アクセスをトンネルさせてサーバー経由にする場合
 
 #### 多くの場合、ここより下の行は変更不要 ####
@@ -73,8 +73,9 @@ PostDown = iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -
 ListenPort = $ServerPort
 PrivateKey = $ServerPrivatekey
 EOF1
-
 ### ここまで
+
+#ヒアドキュメントを使用しているため、行頭のタブをスペースに変換しないこと
 for i in $(seq $Peers) ; do
 	base=$(printf %04d $i)
 	keys=($(cat keys/$base.txt)) || exit 1
