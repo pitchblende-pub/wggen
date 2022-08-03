@@ -56,7 +56,9 @@
 >　ファイルの出力ディレクトリを、絶対パスまたは本スクリプトからの相対パスで指定。
 </div></details>
 
-　また、スクリプト内でwgコマンドを使うため、実行前に***WireGuardのインストール***を済ませておいてください。<br>
+　また、スクリプト内でwgコマンドを使うため、実行前に***WireGuardのインストール***を済ませておいてください。
+> sudo apt install wireguard
+
 　適当なディレクトリに本スクリプトを置き実行すると、wges-outputディレクトリ下にwg0.confが生成されるので、これを/etc/wireguard/にコピーし
 > wq-quick up wg0
 
@@ -65,7 +67,7 @@
 >net.ipv6.conf.all.forward=1
 
 と修正した上でsudo sysctl -pを実行します。<br>
-　一方クライアント側には、c0001.conf等のファイルをインストールしてください。linuxならばwg0.conf等に名前を変えて/etc/wireguardにコピー、スマホの場合はqr0001.txtやqr0001.pngをWireGuardアプリ内のカメラで読み込ませてください。<br>
+　一方クライアント側には、c0001.conf等のファイルをインストールしてください。linuxならばwg0.conf等に名前を変えて(変えなくても良い)/etc/wireguardにコピー、スマホの場合はqr0001.txtやqr0001.pngをWireGuardアプリ内のカメラで読み込ませてください。<br>
 　その他の設定に問題がなければ、トンネリングを利用した通信が可能になります。通信を確認したらサーバー側で
 > sudo systemctl start wg-quick@wg0
 
