@@ -60,7 +60,10 @@
 
 > sudo apt install wireguard
 
-　適当なディレクトリに本スクリプトを置き実行すると、wges-outputディレクトリ下にwg0.confが生成されるので、これを/etc/wireguard/にコピーし
+　適当なディレクトリに本スクリプトを置き実行します。
+> ./wges.sh
+
+すると、wges-outputディレクトリ下にwg0.confが生成されるので、これを/etc/wireguard/にコピーし
 > wq-quick up wg0
 
 を実行することにより、WireGuardが起動します。クライアントからサーバを経由してそれ以外のホストにアクセスするためには/etc/sysctl.confの該当部分を
