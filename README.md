@@ -63,7 +63,7 @@
 　適当なディレクトリに本スクリプトを置き実行すると、wges-outputディレクトリ下にwg0.confが生成されるので、これを/etc/wireguard/にコピーし
 > wq-quick up wg0
 
-を実行することにより、WireGuardが起動します。サーバー以外のホストにアクセスするためには/etc/sysctl.confの該当部分を
+を実行することにより、WireGuardが起動します。クライアントからサーバを経由してそれ以外のホストにアクセスするためには/etc/sysctl.confの該当部分を
 >net.ipv4.ip_forward=1<br>
 >net.ipv6.conf.all.forward=1
 
