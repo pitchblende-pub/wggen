@@ -70,7 +70,10 @@
 >net.ipv4.ip_forward=1<br>
 >net.ipv6.conf.all.forward=1
 
-と修正した上でsudo sysctl -pを実行します。<br>
+と修正した上で
+> sudo sysctl -p
+
+を実行します。<br>
 　一方クライアント側には、c0001.conf等のファイルをインストールしてください。linuxならばwg0.conf等に名前を変えて(変えなくても良い)/etc/wireguardにコピー、スマホの場合はqr0001.txtやqr0001.pngをWireGuardアプリ内のカメラで読み込ませてください。<br>
 　その他の設定に問題がなければ、トンネリングを利用した通信が可能になります。通信を確認したらサーバー側で
 > sudo systemctl start wg-quick@wg0
