@@ -6,6 +6,7 @@ ServerPort=51820 # サーバー側WireGuardが使用する実ポート
 Endpoint=example.ddns.jp:51820 # 外部から見た場合のサーバーアドレスとポート番号
 EthernetInterface='' # サーバーから外部にアクセスするための実インターフェイス名（空欄の場合は自動取得を試行）
 DNS='1.1.1.1, 2606:4700:4700::1111' # トンネル開通後にクライアントが参照するネームサーバー（デフォルトはCloudflare）
+#MTU=1394 #トンネル内でのMTU値を指定する場合
 
 # クライアントがどこ向けのアクセスをトンネルに流す（かつ受け入れる）かの設定
 # $iはクライアント番号、$IPv6Prefixは生成した48bitプレフィックスに置き換えられる。
@@ -74,6 +75,10 @@ ListenPort = $ServerPort
 PrivateKey = $ServerPrivatekey
 EOF1
 ### ここまで
+
+if [[ -v MTU ]]; then
+	echo "MTU=$MTU" >> ${ServerConfigFile}
+fi
 
 #ヒアドキュメントを使用しているため、行頭のタブをスペースに変換しないこと
 for i in $(seq $Peers) ; do
